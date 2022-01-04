@@ -1,13 +1,10 @@
 #include "uls.h"
 
-void mx_validate_dirs(t_list *dirs)
-{
+void mx_validate_dirs(t_list *dirs) {
     DIR *curr;
-    while (dirs)
-    {
+    while (dirs) {
         curr = opendir(dirs->data);
-        if (curr == NULL && errno != ENOTDIR && errno != EACCES)
-        {
+        if (errno != ENOTDIR && errno != EACCES && curr == NULL) {
             mx_printerr("uls: ");
             perror(dirs->data);
             dirs->data = NULL;

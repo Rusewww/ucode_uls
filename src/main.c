@@ -1,7 +1,6 @@
 #include "uls.h"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     char *flags;
     bool only_curr = false;
     t_list *dirs;
@@ -11,12 +10,21 @@ int main(int argc, char **argv)
     flags = mx_extract_flags(argc, argv);
     dirs = mx_extract_dirs(argc, argv);
     mx_sort_list(dirs, &mx_by_lex);
-    mx_validate_dirs(dirs);
-    if (mx_printfiles(dirs, flags))
-    {
+
+    DIR *curr;
+    while (dirs) {
+        curr = opendir(dirs->data);
+        if (errno != ENOTDIR && errno != EACCES && curr == NULL) {
+            mx_printerr("uls: ");
+            perror(dirs->data);
+            dirs->data = NULL;
+        }
+        dirs = dirs->next;
+    }
+
+    if (mx_printfiles(dirs, flags)) {
         t = dirs;
-        while (t && !dirs_left)
-        {
+        while (t && !dirs_left) {
             if (t->data)
                 dirs_left = true;
             t = t->next;
@@ -31,12 +39,9 @@ int main(int argc, char **argv)
     t = dirs;
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
-    while (t)
-    {
-        if (t->data != NULL)
-        {
-            if (!only_curr)
-            {
+    while (t) {
+        if (t->data != NULL) {
+            if (!only_curr) {
                 mx_printstr(t->data);
                 mx_printstr(":\n");
             }
@@ -45,7 +50,7 @@ int main(int argc, char **argv)
         }
         t = t->next;
     }
-    // freeing memory
+
     free(flags);
     mx_del_list(&dirs);
     return errno != 0;
