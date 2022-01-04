@@ -5,7 +5,7 @@ void mx_validate_args(int argc, char **argv) {
     char *permitted_flag = "ARal";
     char *incorrect_flag = NULL;
     for (int i = 1; i < argc && argv[i][0] == '-'; i++) {
-        int len = mx_strlen(argv[i]);
+        len = mx_strlen(argv[i]);
         int j = 1;
         while (j < len) {
             if (mx_strchr(permitted_flag, argv[i][j]) == NULL) {
