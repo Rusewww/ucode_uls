@@ -72,7 +72,7 @@ char *mx_list_file_long(char *src, int *block_count) {
     } else if (S_ISBLK(mode)) {
         mx_str_concat(&res, "b");
     }
-    temp_buf = get_permition(mode);
+    temp_buf = get_permission(mode);
     mx_str_concat(&res, temp_buf);
     mx_strdel(&temp_buf);
     mx_str_concat(&res, " ");
