@@ -2,10 +2,10 @@
 
 int main(int argc, char **argv) {
     char *flags;
-    bool only_curr = false;
+    int only_curr = 0;
+    int dirs_left = 0;
     t_list *dirs;
     t_list *t;
-    bool dirs_left = false;
     mx_validate_args(argc, argv);
     flags = mx_extract_flags(argc, argv);
     dirs = mx_extract_dirs(argc, argv);
