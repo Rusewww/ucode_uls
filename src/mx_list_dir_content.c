@@ -38,7 +38,7 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     dir = opendir(dir_name);
     if (errno != 0) {
 
-        char **path_nodes = mx_strsplit(path, '/');
+        char **path_nodes = mx_strsplit(dir_name, '/');
         for (int i = 0; path_nodes[i]; i++) {
             if (!path_nodes[i + 1]) {
                 base_name = mx_strdup(path_nodes[i]);
