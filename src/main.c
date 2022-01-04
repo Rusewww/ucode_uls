@@ -2,38 +2,45 @@
 
 int main(int argc, char **argv) {
     char *flag;
-    int curr = 0;
-    int left_dir = 0;
+    int current = 0;
+    int left = 0;
+    int i = 1;
     t_list *dirs;
     t_list *tmp;
 
     mx_args_check(argc, argv);
 
     t_list *uniques = NULL;
-    for (int i = 1; i < argc && argv[i][0] == '-'; i++) {
-        for (int j = 1; argv[i][j] != '\0'; j++) {
+    while (i < argc && argv[i][0] == '-'; i++) {
+        for (int j = 1; argv[i][j] != '\0') {
             if (mx_is_unique(uniques, argv[i][j])) {
                 mx_push_front(&uniques, &argv[i][j]);
             }
         }
+        i++;
     }
+
     flag = mx_list_to_str(uniques);
     mx_del_list(&uniques);
 
     argc--;
     argv++;
+
     while (argc > 0 && (*argv)[0] == '-') {
         argv++;
         argc--;
     }
 
-    for (int i = 0; i < argc; i++) {
+    i = 0;
+
+    for (i < argc) {
         mx_push_back(&dirs, argv[i]);
+        i++;
     }
 
     mx_sort_list(dirs, &mx_by_lex);
-
     DIR *curr;
+
     while (dirs) {
         curr = opendir(dirs->data);
         if (errno != ENOTDIR && errno != EACCES && curr == NULL) {
@@ -46,30 +53,30 @@ int main(int argc, char **argv) {
 
     if (mx_print_files(dirs, flag)) {
         tmp = dirs;
-        while (tmp && !left_dir) {
+        while (tmp && !left) {
             if (tmp->data) {
-                left_dir = true;
+                left = true;
             }
             tmp = tmp->next;
         }
-        if (left_dir)
+        if (left)
             mx_printchar('\n');
     }
 
-    curr = dirs == NULL;
+    current = dirs == NULL;
 
-    if (curr) {
+    if (current) {
         mx_push_front(&dirs, ".");
     }
 
-    curr = curr || mx_list_size(dirs) == 1;
+    current = current || mx_list_size(dirs) == 1;
     tmp = dirs;
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
 
-    while (tmp) {
+    while (tmp != NULL) {
         if (tmp->data != NULL) {
-            if (!curr) {
+            if (!current) {
                 mx_printstr(tmp->data);
                 mx_printstr(":\n");
             }
