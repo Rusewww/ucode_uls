@@ -13,7 +13,7 @@ static void print_list_long(char *dir_name, t_list *list) {
         mx_strdel(&path_buf);
         list = list->next;
     }
-    if (head) {
+    if (head != NULL) {
         mx_printstr("total ");
         mx_printint(block_count);
         mx_printchar('\n');
@@ -37,7 +37,6 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     errno = 0;
     dir = opendir(dir_name);
     if (errno != 0) {
-
         char **path_nodes = mx_strsplit(dir_name, '/');
         for (int i = 0; path_nodes[i]; i++) {
             if (!path_nodes[i + 1]) {
@@ -73,25 +72,26 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
         cur_file = readdir(dir);
     }
     mx_sort_list(to_print, &mx_by_lex);
-    if (!mx_strchr(flags, 'l'))
+    if (!mx_strchr(flags, 'l')) {
         mx_col_print(to_print);
-    else
+    } else {
         print_list_long(dir_name, to_print);
-    if (!to_print)
+    }
+    if (!to_print) {
         is_empty = true;
+    }
     mx_del_list(&to_print);
     closedir(dir);
     if (inner_dir_names) {
         mx_sort_list(inner_dir_names, &mx_by_lex);
         curr = inner_dir_names;
-        while (curr) {
+        for (;curr != NULL; curr = curr->next;) {
             mx_printchar('\n');
             mx_printstr(curr->data);
             mx_printstr(":\n");
             mx_list_dir_content(curr->data, flags);
             mx_strdel((char **) &curr->data);
             mx_pop_front(&inner_dir_names);
-            curr = curr->next;
         }
     }
     return is_empty;
