@@ -17,7 +17,17 @@ int main(int argc, char **argv) {
     flag = list_to_str(uniques);
     mx_del_list(&uniques);
 
-    dirs = mx_extract_dirs(argc, argv);
+    t_list *res = NULL;
+    argc--;
+    argv++;
+    while (argc > 0 && (*argv)[0] == '-') {
+        argv++;
+        argc--;
+    }
+    for (int i = 0; i < argc; i++) {
+        mx_push_back(&dirs, argv[i]);
+    }
+
     mx_sort_list(dirs, &mx_by_lex);
 
     DIR *curr;
