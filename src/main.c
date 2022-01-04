@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     t_list *dirs;
     t_list *t;
 
-    mx_validate_args(argc, argv);
+    mx_args_check(argc, argv);
 
     t_list *uniques = NULL;
     for (int i = 1; i < argc && argv[i][0] == '-'; i++)
