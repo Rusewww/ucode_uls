@@ -15,7 +15,7 @@ void mx_args_check(int argc, char **argv) {
             j++;
         }
         if (incorrect_flag != NULL) {
-            mx_printerr("\nusage: uls [-ARal] [file ...]\n");
+            mx_printerr("usage: uls [-ARal] [file ...]\n");
             exit(1);
         }
     }
