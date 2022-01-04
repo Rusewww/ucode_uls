@@ -2,18 +2,21 @@
 
 int main(int argc, char **argv) {
     char *flag;
-    int only_curr = 0;
-    int dirs_left = 0;
+    int curr = 0;
+    int left_dir = 0;
     t_list *dirs;
-    t_list *t;
+    t_list *tmp;
 
     mx_args_check(argc, argv);
 
     t_list *uniques = NULL;
-    for (int i = 1; i < argc && argv[i][0] == '-'; i++)
-        for (int j = 1; argv[i][j] != '\0'; j++)
-            if (mx_is_unique(uniques, argv[i][j]))
+    for (int i = 1; i < argc && argv[i][0] == '-'; i++) {
+        for (int j = 1; argv[i][j] != '\0'; j++) {
+            if (mx_is_unique(uniques, argv[i][j])) {
                 mx_push_front(&uniques, &argv[i][j]);
+            }
+        }
+    }
     flag = mx_list_to_str(uniques);
     mx_del_list(&uniques);
 
@@ -23,6 +26,7 @@ int main(int argc, char **argv) {
         argv++;
         argc--;
     }
+
     for (int i = 0; i < argc; i++) {
         mx_push_back(&dirs, argv[i]);
     }
@@ -41,35 +45,39 @@ int main(int argc, char **argv) {
     }
 
     if (mx_print_files(dirs, flag)) {
-        t = dirs;
-        while (t && !dirs_left) {
-            if (t->data) {
-                dirs_left = true;
+        tmp = dirs;
+        while (tmp && !left_dir) {
+            if (tmp->data) {
+                left_dir = true;
             }
-            t = t->next;
+            tmp = tmp->next;
         }
-        if (dirs_left)
+        if (left_dir)
             mx_printchar('\n');
     }
-    only_curr = dirs == NULL;
-    if (only_curr) {
+
+    curr = dirs == NULL;
+
+    if (curr) {
         mx_push_front(&dirs, ".");
     }
-    only_curr = only_curr || mx_list_size(dirs) == 1;
-    t = dirs;
+
+    curr = curr || mx_list_size(dirs) == 1;
+    tmp = dirs;
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
-    while (t) {
-        if (t->data != NULL) {
-            if (!only_curr) {
-                mx_printstr(t->data);
+
+    while (tmp) {
+        if (tmp->data != NULL) {
+            if (!curr) {
+                mx_printstr(tmp->data);
                 mx_printstr(":\n");
             }
-            if (!mx_list_dir_content(t->data, flag) && t->next) {
+            if (!mx_list_dir_content(tmp->data, flag) && tmp->next) {
                 mx_printchar('\n');
             }
         }
-        t = t->next;
+        tmp = tmp->next;
     }
 
     free(flag);
