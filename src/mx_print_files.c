@@ -28,7 +28,7 @@ bool mx_print_files(t_list *dirs, char *flag) {
 
     if (have_files) {
         mx_long_col_print(big_printing);
-        mx_col_print(printing);
+        mx_colum_print(printing);
         mx_del_list(&printing);
         mx_del_list(&big_printing);
     }
