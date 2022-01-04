@@ -1,26 +1,36 @@
 #include "libmx.h"
 
-char *mx_file_to_str(const char *file)
-{
-    int count = 0;
-    char buf[1];
-    int fd = open(file, O_RDONLY);
-    if (fd < 0)
-    {
-        close(fd);
+char *mx_file_to_str(const char *filename) {
+    if (filename == NULL) {
         return NULL;
     }
-    while (read(fd, buf, 1) != 0) count++;
-    close(fd);
-    if (count == 0) return mx_strnew(0);
-    fd = open(file, O_RDONLY);
-    if (fd < 0)
-    {
-        close(fd);
+    int fileIn = open(filename, O_RDONLY);
+    if (fileIn < 0) {
+        close(fileIn);
         return NULL;
     }
-    char *res = mx_strnew(count);
-    if (read(fd, res, count) != count) return NULL;
-    close(fd);
-    return res;
+
+    char buffer;
+    int length = 0;
+    while (read(fileIn, &buffer, 1)) {
+        length++;
+    }
+    if (length == 0) {
+        mx_printerr("error: file ");
+        mx_printerr(filename);
+        mx_printerr(" is empty\n");
+        exit(0);
+    }
+
+    close(fileIn);
+
+    fileIn = open(filename, O_RDONLY);
+
+    char *arr = mx_strnew(length);
+
+    for (int i = 0; read(fileIn, &buffer, 1); i++) {
+        arr[i] = buffer;
+    }
+    close(fileIn);
+    return arr;
 }

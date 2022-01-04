@@ -1,29 +1,38 @@
 #include "libmx.h"
 
-char *mx_itoa(int number)
-{
-    if (number == 0)
-    {
-        return mx_strdup("0");
+char *mx_itoa(int number) {
+    int length = 0;
+
+    int number_clone = number;
+
+    while (number_clone) {
+        number_clone /= 10;
+        length++;
     }
-    int copy = number;
-    int count = 0;
-    char curr = '\0';
-    if (number < 0) count++;
-    while (copy != 0)
-    {
-        count++;
-        copy /= 10;
+    char *out = NULL;
+    out = mx_strnew(length);
+
+    if (number == -2147483648) {
+        return mx_strcpy(out, "-2147483648");
     }
-    char *res = mx_strnew(count);
-    if (number < 0) res[0] = '-';
-    while (number != 0)
-    {
-        curr = number % 10;
-        number /= 10;
-        curr = curr > 0 ? curr : -curr;
-        res[count - 1] = curr + '0';
-        count--;
+    if (number == 0) {
+        return mx_strcpy(out, "0");
     }
-    return res;
+    int length_second = 0;
+    int minus = 0;
+    if (number < 0) {
+        minus = 1;
+        number *= -1;
+    }
+    while (number) {
+        out[length_second] = number % 10 + 48;
+        number = number / 10;
+        length_second++;
+    }
+    if (minus != 0) {
+        out[length_second] = ('-');
+        length_second++;
+    }
+    mx_str_reverse(out);
+    return out;
 }

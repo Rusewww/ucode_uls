@@ -2,25 +2,20 @@
 
 static char *prev = NULL;
 
-int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd)
-{
+int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd) {
     if (buf_size == 0) return -2;
     char *buf = mx_strnew(buf_size);
     bool flag = true;
     int count = 0;
     int b_read = 0;
     int d_in_buf;
-    if (prev != NULL)
-    {
+    if (prev != NULL) {
         int d_in_prev = mx_get_char_index(prev, delim);
-        if (d_in_prev < 0)
-        {
+        if (d_in_prev < 0) {
             mx_strcpy(*lineptr, prev);
             count = mx_strlen(prev);
             mx_strdel(&prev);
-        }
-        else
-        {
+        } else {
             mx_strncpy(*lineptr, prev, d_in_prev);
             char *temp = prev;
             count = d_in_prev;
@@ -30,11 +25,9 @@ int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd)
             flag = false;
         }
     }
-    while (flag)
-    {
+    while (flag) {
         b_read = read(fd, buf, buf_size);
-        if (b_read == 0)
-        {
+        if (b_read == 0) {
             *lineptr[count] = '\0';
             mx_strdel(&prev);
             mx_strdel(&buf);
@@ -42,8 +35,7 @@ int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd)
         }
         d_in_buf = mx_get_char_index(buf, delim);
         if (d_in_buf < 0) mx_strcpy(&(*lineptr)[count], buf);
-        else
-        {
+        else {
             mx_strncpy(&(*lineptr)[count], buf, d_in_buf);
             prev = mx_strdup(buf + d_in_buf + 1);
             flag = false;
