@@ -41,7 +41,14 @@ static char *get_time_trimmed(time_t file_time) {
 
 char *mx_list_file_long(char *src, int *block_count) {
     mode_t mode;
-    char *name = mx_get_path_base(src);
+    char *name;
+    char **path_nodes = mx_strsplit(src, '/');
+    for (int i = 0; path_nodes[i]; i++) {
+        if (!path_nodes[i + 1]) {
+            name = mx_strdup(path_nodes[i]);
+        }
+    }
+    mx_del_strarr(&path_nodes);
     char *res = NULL;
     char *temp_buf;
     struct stat file_info;
