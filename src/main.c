@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 
     t_list *uniques = NULL;
     while (i < argc && argv[i][0] == '-') {
-        for (int j = 1; argv[i][j] != '\0') {
+        for (int j = 1; argv[i][j] != '\0'; j++) {
             if (mx_is_unique(uniques, argv[i][j])) {
                 mx_push_front(&uniques, &argv[i][j]);
             }
