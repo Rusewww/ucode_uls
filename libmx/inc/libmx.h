@@ -95,4 +95,9 @@ int mx_list_size(t_list *list);
 t_list *mx_sort_list(t_list *list, bool (*cmp)(void *, void *));
 void mx_del_list(t_list **list);
 
+//other
+
+bool mx_by_lex(void *a, void *b);
+bool mx_by_null(void *a, void *b);
+
 #endif /* LIBMX */
