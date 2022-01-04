@@ -39,7 +39,7 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     if (errno != 0) {
         char **path_nodes = mx_strsplit(dir_name, '/');
         int i = 0;
-        for (path_nodes[i]) {
+        while (path_nodes[i]) {
             if (!path_nodes[i + 1]) {
                 name = mx_strdup(path_nodes[i]);
             }
@@ -62,7 +62,8 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
                 continue;
             }
         }
-        if (mx_strcmp(current_file->d_name, ".") && mx_strcmp(current_file->d_name, "..") && current_file->d_type == DT_DIR &&
+        if (mx_strcmp(current_file->d_name, ".") && mx_strcmp(current_file->d_name, "..") &&
+            current_file->d_type == DT_DIR &&
             is_recursive) {
             path_build = mx_strdup(dir_name);
             mx_str_concat(&path_build, "/");
@@ -76,7 +77,7 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     if (!mx_strchr(flags, 'l')) {
         mx_colum_print(print);
     } else {
-        print_list_long(dir_name, print);
+        print_long_list(dir_name, print);
     }
     if (!print) {
         empty = true;
