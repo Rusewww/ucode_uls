@@ -84,8 +84,9 @@ char *mx_list_file_long(char *src, int *block_count) {
         temp_buf = mx_itoa(file_info.st_gid);
         mx_str_concat(&res, temp_buf);
         mx_strdel(&temp_buf);
-    } else
+    } else {
         mx_str_concat(&res, getgrgid(file_info.st_gid)->gr_name);
+    }
     mx_str_concat(&res, " ");
     temp_buf = mx_itoa(file_info.st_size);
     mx_str_concat(&res, temp_buf);
