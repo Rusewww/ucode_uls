@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
     flag = list_to_str(uniques);
     mx_del_list(&uniques);
 
-    t_list *res = NULL;
     argc--;
     argv++;
     while (argc > 0 && (*argv)[0] == '-') {
