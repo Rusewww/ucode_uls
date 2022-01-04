@@ -1,11 +1,12 @@
 #include "uls.h"
 
-bool mx_print_files(t_list *dirs, char *flags) {
+bool mx_print_files(t_list *dirs, char *flag) {
     DIR *curr;
-    t_list *to_print = NULL;
-    t_list *to_print_long = NULL;
-    int block_counter = 0;
-    int has_files = 0;
+    int counter = 0;
+    int have_files = 0;
+    t_list *printing = NULL;
+    t_list *big_printing = NULL;
+
     while (dirs != NULL) {
         if (!dirs->data) {
             dirs = dirs->next;
@@ -13,22 +14,24 @@ bool mx_print_files(t_list *dirs, char *flags) {
         }
         curr = opendir(dirs->data);
         if (errno == ENOTDIR && curr == NULL) {
-            has_files = 1;
+            have_files = 1;
             errno = 0;
-            if (!mx_strchr(flags, 'l')) {
-                mx_push_back(&to_print, mx_strdup(dirs->data));
+            if (!mx_strchr(flag, 'l')) {
+                mx_push_back(&printing, mx_strdup(dirs->data));
             } else {
-                mx_push_back(&to_print_long, mx_list_file_long(dirs->data, &block_counter));
+                mx_push_back(&big_printing, mx_list_file_long(dirs->data, &counter));
             }
             dirs->data = NULL;
         }
         dirs = dirs->next;
     }
-    if (has_files) {
-        mx_long_col_print(to_print_long);
-        mx_col_print(to_print);
-        mx_del_list(&to_print);
-        mx_del_list(&to_print_long);
+
+    if (have_files) {
+        mx_long_col_print(big_printing);
+        mx_col_print(printing);
+        mx_del_list(&printing);
+        mx_del_list(&big_printing);
     }
-    return has_files;
+
+    return have_files;
 }
