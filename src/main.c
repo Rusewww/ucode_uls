@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         dirs = dirs->next;
     }
 
-    if (mx_printfiles(dirs, flag)) {
+    if (mx_print_files(dirs, flag)) {
         t = dirs;
         while (t && !dirs_left) {
             if (t->data) {
