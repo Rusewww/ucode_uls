@@ -21,7 +21,6 @@ char *mx_extract_flags(int argc, char **argv);
 t_list *mx_extract_dirs(int argc, char **argv);
 bool mx_by_lex(void *a, void *b);
 bool mx_by_null(void *a, void *b);
-void mx_validate_dirs(t_list *dirs);
 bool mx_list_dir_content(char *dir_name, char *flags);
 bool mx_printfiles(t_list *dirs, char *flags);
 char *mx_list_file_long(char *src, int *blcok_count);
