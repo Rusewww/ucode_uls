@@ -10,8 +10,7 @@ t_list *mx_extract_dirs(int argc, char **argv)
         argv++;
         argc--;
     }
-    for (int i = 0; i < argc; i++) {
+    for (int i = 0; i < argc; i++)
         mx_push_back(&res, argv[i]);
-    }
     return res;
 }

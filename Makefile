@@ -1,14 +1,14 @@
 all: uls
 
 uls: libmx.a obj
-	@clang -std=gnu11 -Wall -Wextra -Werror -Wpedantic -I inc obj/*.o libmx/libmx.a -o uls
+	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc obj/*.o libmx/libmx.a -o uls
 
-obj: src/*.c inc/*.h
+obj: src ../ucode_uls/inc
 	@mkdir -p obj
-	@clang -std=gnu11 -Wall -Wextra -Werror -Wpedantic -I inc -c src/*.c
+	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc -c src/*.c
 	@mv *.o obj
 
-libmx.a: libmx/src/*.c libmx/inc/*.h
+libmx.a: libmx/src ../ucode_uls/libmx/inc
 	@make -C libmx
 
 clean:

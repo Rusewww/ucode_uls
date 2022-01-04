@@ -7,16 +7,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <stdint.h>
-
-
-#if __linux__
-
-#include <malloc.h>
-
-#define malloc_size malloc_usable_size
-#elif __APPLE__
 #include <malloc/malloc.h>
-#endif
 
 // not requested?
 

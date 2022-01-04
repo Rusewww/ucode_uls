@@ -1,48 +1,52 @@
 #include "uls.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     char *flags;
-    int currentjust = 0;
-    int left = 0;
-    t_list *direct;
-    t_list *tmp;
+    bool only_curr = false;
+    t_list *dirs;
+    t_list *t;
+    bool dirs_left = false;
     mx_validate_args(argc, argv);
     flags = mx_extract_flags(argc, argv);
-    direct = mx_extract_dirs(argc, argv);
-    mx_sort_list(direct, &mx_by_lex);
-    mx_validate_dirs(direct);
-    if (mx_printfiles(direct, flags)) {
-        tmp = direct;
-        while (tmp && !left) {
-            if (tmp->data) {
-                left = true;
-            }
-            tmp = tmp->next;
+    dirs = mx_extract_dirs(argc, argv);
+    mx_sort_list(dirs, &mx_by_lex);
+    mx_validate_dirs(dirs);
+    if (mx_printfiles(dirs, flags))
+    {
+        t = dirs;
+        while (t && !dirs_left)
+        {
+            if (t->data)
+                dirs_left = true;
+            t = t->next;
         }
-        if (left == 1) {
+        if (dirs_left)
             mx_printchar('\n');
-        }
     }
-    currentjust = direct == NULL;
-    if (currentjust) {
-        mx_push_front(&direct, ".");
-    }
-    currentjust = currentjust || mx_list_size(direct) == 1;
-    tmp = direct;
-    mx_sort_list(direct, &mx_by_lex);
-    mx_sort_list(direct, &mx_by_null);
-    while (tmp) {
-        if (tmp->data != NULL) {
-            if (!currentjust) {
-                mx_printstr(tmp->data);
+    only_curr = dirs == NULL;
+    if (only_curr)
+        mx_push_front(&dirs, ".");
+    only_curr = only_curr || mx_list_size(dirs) == 1;
+    t = dirs;
+    mx_sort_list(dirs, &mx_by_lex);
+    mx_sort_list(dirs, &mx_by_null);
+    while (t)
+    {
+        if (t->data != NULL)
+        {
+            if (!only_curr)
+            {
+                mx_printstr(t->data);
                 mx_printstr(":\n");
             }
-            if (!mx_list_dir_content(tmp->data, flags) && tmp->next)
+            if (!mx_list_dir_content(t->data, flags) && t->next)
                 mx_printchar('\n');
         }
-        tmp = tmp->next;
+        t = t->next;
     }
+    // freeing memory
     free(flags);
-    mx_del_list(&direct);
+    mx_del_list(&dirs);
     return errno != 0;
 }
