@@ -1,20 +1,20 @@
 #include "uls.h"
 
-bool is_unique(t_list *uniqs, char c) {
-    while (uniqs != NULL) {
-        if (*(char *) (uniqs->data) == c)
+bool mx_is_unique(t_list *unique, char c) {
+    while (unique != NULL) {
+        if (*(char *) (unique->data) == c)
             return false;
-        uniqs = uniqs->next;
+        unique = unique->next;
     }
     return true;
 }
 
-char *list_to_str(t_list *uniqs) {
-    int size = mx_list_size(uniqs);
+char *mx_list_to_str(t_list *list) {
+    int size = mx_list_size(list);
     char *res = mx_strnew(size);
     for (int i = 0; i < size; i++) {
-        res[i] = *(char *) (uniqs->data);
-        uniqs = uniqs->next;
+        res[i] = *(char *) (list->data);
+        list = list->next;
     }
     return res;
 }

@@ -12,9 +12,9 @@ int main(int argc, char **argv) {
     t_list *uniques = NULL;
     for (int i = 1; i < argc && argv[i][0] == '-'; i++)
         for (int j = 1; argv[i][j] != '\0'; j++)
-            if (is_unique(uniques, argv[i][j]))
+            if (mx_is_unique(uniques, argv[i][j]))
                 mx_push_front(&uniques, &argv[i][j]);
-    flag = list_to_str(uniques);
+    flag = mx_list_to_str(uniques);
     mx_del_list(&uniques);
 
     argc--;

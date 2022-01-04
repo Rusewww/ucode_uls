@@ -23,7 +23,7 @@ bool mx_printfiles(t_list *dirs, char *flags);
 char *mx_list_file_long(char *src, int *blcok_count);
 void mx_col_print(t_list *list);
 void mx_long_col_print(t_list *list);
-bool is_unique(t_list *uniqs, char c);
-char *list_to_str(t_list *uniqs);
+bool mx_is_unique(t_list *unique, char c);
+char *mx_list_to_str(t_list *list);
 
 #endif
