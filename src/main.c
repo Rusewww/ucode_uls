@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
     mx_args_check(argc, argv);
 
     t_list *uniques = NULL;
-    while (i < argc && argv[i][0] == '-'; i++) {
+    while (i < argc && argv[i][0] == '-') {
         for (int j = 1; argv[i][j] != '\0') {
             if (mx_is_unique(uniques, argv[i][j])) {
                 mx_push_front(&uniques, &argv[i][j]);
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 
     i = 0;
 
-    for (i < argc) {
+    while (i < argc) {
         mx_push_back(&dirs, argv[i]);
         i++;
     }
