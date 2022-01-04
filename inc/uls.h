@@ -24,7 +24,7 @@ char *mx_list_file_long(char *src, int *blcok_count);
 char *mx_get_path_base(char *path);
 void mx_col_print(t_list *list);
 void mx_long_col_print(t_list *list);
-static bool is_unique(t_list *uniqs, char c);
-static char *list_to_str(t_list *uniqs);
+bool is_unique(t_list *uniqs, char c);
+char *list_to_str(t_list *uniqs);
 
 #endif

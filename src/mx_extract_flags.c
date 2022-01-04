@@ -1,6 +1,6 @@
 #include "uls.h"
 
-static bool is_unique(t_list *uniqs, char c) {
+bool is_unique(t_list *uniqs, char c) {
     while (uniqs != NULL) {
         if (*(char *) (uniqs->data) == c)
             return false;
@@ -9,7 +9,7 @@ static bool is_unique(t_list *uniqs, char c) {
     return true;
 }
 
-static char *list_to_str(t_list *uniqs) {
+char *list_to_str(t_list *uniqs) {
     int size = mx_list_size(uniqs);
     char *res = mx_strnew(size);
     for (int i = 0; i < size; i++) {
