@@ -1,54 +1,56 @@
 #include "uls.h"
 
-static char *get_permitions(mode_t mode) {
-    char *res = mx_strnew(9);
-    res[0] = S_IRUSR & mode ? 'r' : '-';
-    res[1] = S_IWUSR & mode ? 'w' : '-';
-    res[2] = S_IXUSR & mode ? 'x' : '-';
-    res[3] = S_IRGRP & mode ? 'r' : '-';
-    res[4] = S_IWGRP & mode ? 'w' : '-';
-    res[5] = S_IXGRP & mode ? 'x' : '-';
-    res[6] = S_IROTH & mode ? 'r' : '-';
-    res[7] = S_IWOTH & mode ? 'w' : '-';
-    res[8] = S_IXOTH & mode ? 'x' : '-';
-    return res;
+char *get_permission(mode_t mode) {
+    char *out = mx_strnew(9);
+    out[0] = S_IRUSR & mode ? 'r' : '-';
+    out[1] = S_IWUSR & mode ? 'w' : '-';
+    out[2] = S_IXUSR & mode ? 'x' : '-';
+    out[3] = S_IRGRP & mode ? 'r' : '-';
+    out[4] = S_IWGRP & mode ? 'w' : '-';
+    out[5] = S_IXGRP & mode ? 'x' : '-';
+    out[6] = S_IROTH & mode ? 'r' : '-';
+    out[7] = S_IWOTH & mode ? 'w' : '-';
+    out[8] = S_IXOTH & mode ? 'x' : '-';
+    return out;
 }
 
-static char *get_time_trimmed(time_t file_time) {
-    char **split_bufer = mx_strsplit(ctime(&file_time), ' ');
-    time_t cur_time = time(NULL);
-    char **cur_time_buf = mx_strsplit(ctime(&cur_time), ' ');
-    char **clock_bufer = mx_strsplit(split_bufer[3], ':');
-    char *res = NULL;
-    mx_str_concat(&res, split_bufer[1]);
-    mx_str_concat(&res, " ");
-    mx_str_concat(&res, split_bufer[2]);
-    mx_str_concat(&res, " ");
-    if (mx_strcmp(cur_time_buf[4], split_bufer[4])) {
-        *mx_strchr(split_bufer[4], '\n') = '\0';
-        mx_str_concat(&res, " ");
-        mx_str_concat(&res, split_bufer[4]);
+char *get_time_trimmed(time_t file_time) {
+    char **split_buffer = mx_strsplit(ctime(&file_time), ' ');
+    time_t current_time = time(NULL);
+    char **current_time_buffer = mx_strsplit(ctime(&current_time), ' ');
+    char **clock_buffer = mx_strsplit(split_buffer[3], ':');
+    char *out = NULL;
+    mx_str_concat(&out, split_buffer[1]);
+    mx_str_concat(&out, " ");
+    mx_str_concat(&out, split_buffer[2]);
+    mx_str_concat(&out, " ");
+    if (mx_strcmp(current_time_buffer[4], split_buffer[4])) {
+        *mx_strchr(split_buffer[4], '\n') = '\0';
+        mx_str_concat(&out, " ");
+        mx_str_concat(&out, split_buffer[4]);
     } else {
-        mx_str_concat(&res, clock_bufer[0]);
-        mx_str_concat(&res, ":");
-        mx_str_concat(&res, clock_bufer[1]);
+        mx_str_concat(&out, clock_buffer[0]);
+        mx_str_concat(&out, ":");
+        mx_str_concat(&out, clock_buffer[1]);
     }
-    mx_del_strarr(&clock_bufer);
-    mx_del_strarr(&split_bufer);
-    mx_del_strarr(&cur_time_buf);
-    return res;
+    mx_del_strarr(&clock_buffer);
+    mx_del_strarr(&split_buffer);
+    mx_del_strarr(&current_time_buffer);
+    return out;
 }
 
 char *mx_list_file_long(char *src, int *block_count) {
     mode_t mode;
     char *name;
-    char **path_nodes = mx_strsplit(src, '/');
-    for (int i = 0; path_nodes[i]; i++) {
-        if (!path_nodes[i + 1]) {
-            name = mx_strdup(path_nodes[i]);
+    char **path = mx_strsplit(src, '/');
+    int i = 0;
+    while (path[i]) {
+        if (!path[i + 1]) {
+            name = mx_strdup(path[i]);
         }
+        i++;
     }
-    mx_del_strarr(&path_nodes);
+    mx_del_strarr(&path);
     char *res = NULL;
     char *temp_buf;
     struct stat file_info;
