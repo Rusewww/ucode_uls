@@ -15,8 +15,6 @@ void mx_args_check(int argc, char **argv) {
             j++;
         }
         if (incorrect_flag != NULL) {
-            mx_printerr("uls: illegal option -- ");
-            write(STDERR_FILENO, incorrect_flag, 1);
             mx_printerr("\nusage: uls [-ARal] [file ...]\n");
             exit(1);
         }
