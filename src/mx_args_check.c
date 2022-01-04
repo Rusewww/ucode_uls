@@ -1,6 +1,6 @@
 #include "uls.h"
 
-void mx_validate_args(int argc, char **argv) {
+void mx_args_check(int argc, char **argv) {
     int len = 0;
     char *permitted_flag = "ARal";
     char *incorrect_flag = NULL;
