@@ -85,7 +85,7 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     if (inner_dir_names) {
         mx_sort_list(inner_dir_names, &mx_by_lex);
         curr = inner_dir_names;
-        for (;curr != NULL; curr = curr->next;) {
+        for (;curr != NULL; curr = curr->next) {
             mx_printchar('\n');
             mx_printstr(curr->data);
             mx_printstr(":\n");
