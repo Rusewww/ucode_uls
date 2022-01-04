@@ -3,12 +3,12 @@ all: uls
 uls: libmx.a obj
 	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc obj/*.o libmx/libmx.a -o uls
 
-obj: src ../ucode_uls/inc
+obj: src/*.c inc/*.h
 	@mkdir -p obj
 	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc -c src/*.c
 	@mv *.o obj
 
-libmx.a: libmx/src ../ucode_uls/libmx/inc
+libmx.a: libmx/src/*.c libmx/inc/*.h
 	@make -C libmx
 
 clean:
@@ -20,4 +20,3 @@ uninstall: clean
 	@make -C libmx uninstall
 
 reinstall: uninstall all
-
