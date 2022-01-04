@@ -1,7 +1,6 @@
 #include "uls.h"
 
-char *mx_get_path_base(char *path)
-{
+char *mx_get_path_base(char *path) {
     char *res;
     char **path_nodes = mx_strsplit(path, '/');
     for (int i = 0; path_nodes[i]; i++)

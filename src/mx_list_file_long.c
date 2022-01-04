@@ -1,7 +1,6 @@
 #include "uls.h"
 
-static char *get_permitions(mode_t mode)
-{
+static char *get_permitions(mode_t mode) {
     char *res = mx_strnew(9);
     res[0] = S_IRUSR & mode ? 'r' : '-';
     res[1] = S_IWUSR & mode ? 'w' : '-';
@@ -14,8 +13,8 @@ static char *get_permitions(mode_t mode)
     res[8] = S_IXOTH & mode ? 'x' : '-';
     return res;
 }
-static char *get_time_trimmed(time_t file_time)
-{
+
+static char *get_time_trimmed(time_t file_time) {
     char **split_bufer = mx_strsplit(ctime(&file_time), ' ');
     time_t cur_time = time(NULL);
     char **cur_time_buf = mx_strsplit(ctime(&cur_time), ' ');
@@ -25,14 +24,11 @@ static char *get_time_trimmed(time_t file_time)
     mx_str_concat(&res, " ");
     mx_str_concat(&res, split_bufer[2]);
     mx_str_concat(&res, " ");
-    if (mx_strcmp(cur_time_buf[4], split_bufer[4]))
-    {
+    if (mx_strcmp(cur_time_buf[4], split_bufer[4])) {
         *mx_strchr(split_bufer[4], '\n') = '\0';
         mx_str_concat(&res, " ");
         mx_str_concat(&res, split_bufer[4]);
-    }
-    else
-    {
+    } else {
         mx_str_concat(&res, clock_bufer[0]);
         mx_str_concat(&res, ":");
         mx_str_concat(&res, clock_bufer[1]);
@@ -43,8 +39,7 @@ static char *get_time_trimmed(time_t file_time)
     return res;
 }
 
-char *mx_list_file_long(char *src, int *block_count)
-{
+char *mx_list_file_long(char *src, int *block_count) {
     mode_t mode;
     char *name = mx_get_path_base(src);
     char *res = NULL;
@@ -77,13 +72,11 @@ char *mx_list_file_long(char *src, int *block_count)
     mx_str_concat(&res, " ");
     mx_str_concat(&res, getpwuid(file_info.st_uid)->pw_name);
     mx_str_concat(&res, " ");
-    if (getgrgid(file_info.st_gid) == NULL)
-    {
+    if (getgrgid(file_info.st_gid) == NULL) {
         temp_buf = mx_itoa(file_info.st_gid);
         mx_str_concat(&res, temp_buf);
         mx_strdel(&temp_buf);
-    }
-    else
+    } else
         mx_str_concat(&res, getgrgid(file_info.st_gid)->gr_name);
     mx_str_concat(&res, " ");
     temp_buf = mx_itoa(file_info.st_size);

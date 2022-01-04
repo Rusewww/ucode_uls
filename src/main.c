@@ -9,6 +9,7 @@ int main(int argc, char **argv) {
     mx_validate_args(argc, argv);
     flags = mx_extract_flags(argc, argv);
     dirs = mx_extract_dirs(argc, argv);
+
     mx_sort_list(dirs, &mx_by_lex);
 
     DIR *curr;
@@ -25,16 +26,18 @@ int main(int argc, char **argv) {
     if (mx_printfiles(dirs, flags)) {
         t = dirs;
         while (t && !dirs_left) {
-            if (t->data)
+            if (t->data) {
                 dirs_left = true;
+            }
             t = t->next;
         }
         if (dirs_left)
             mx_printchar('\n');
     }
     only_curr = dirs == NULL;
-    if (only_curr)
+    if (only_curr) {
         mx_push_front(&dirs, ".");
+    }
     only_curr = only_curr || mx_list_size(dirs) == 1;
     t = dirs;
     mx_sort_list(dirs, &mx_by_lex);
@@ -45,8 +48,9 @@ int main(int argc, char **argv) {
                 mx_printstr(t->data);
                 mx_printstr(":\n");
             }
-            if (!mx_list_dir_content(t->data, flags) && t->next)
+            if (!mx_list_dir_content(t->data, flags) && t->next) {
                 mx_printchar('\n');
+            }
         }
         t = t->next;
     }

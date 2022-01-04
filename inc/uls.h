@@ -1,20 +1,19 @@
 #ifndef ULS
 #define ULS
-// #define _DEFAULT_SOURCE
 
+#include "../libmx/inc/libmx.h"
+#include <pwd.h>
+#include <grp.h>
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
 #include <dirent.h>
+#include <sys/acl.h>
 #include <sys/stat.h>
-#include <uuid/uuid.h>
 #include <sys/xattr.h>
 #include <sys/ioctl.h>
-#include <sys/acl.h>
 #include <sys/errno.h>
-#include <pwd.h>
-#include <grp.h>
-#include "libmx.h"
+#include <uuid/uuid.h>
 
 void mx_validate_args(int argc, char **argv);
 char *mx_extract_flags(int argc, char **argv);
@@ -28,4 +27,4 @@ char *mx_get_path_base(char *path);
 void mx_col_print(t_list *list);
 void mx_long_col_print(t_list *list);
 
-#endif /* ULS */
+#endif
