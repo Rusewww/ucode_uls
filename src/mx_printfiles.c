@@ -1,22 +1,18 @@
 #include "uls.h"
 
-bool mx_printfiles(t_list *dirs, char *flags)
-{
+bool mx_printfiles(t_list *dirs, char *flags) {
     DIR *curr;
     t_list *to_print = NULL;
     t_list *to_print_long = NULL;
     int block_counter = 0;
     bool has_files = false;
-    while (dirs)
-    {
-        if (!dirs->data)
-        {
+    while (dirs) {
+        if (!dirs->data) {
             dirs = dirs->next;
             continue;
         }
         curr = opendir(dirs->data);
-        if (curr == NULL && errno == ENOTDIR)
-        {
+        if (curr == NULL && errno == ENOTDIR) {
             has_files = true;
             errno = 0;
             if (!mx_strchr(flags, 'l'))
@@ -27,8 +23,7 @@ bool mx_printfiles(t_list *dirs, char *flags)
         }
         dirs = dirs->next;
     }
-    if (has_files)
-    {
+    if (has_files) {
         mx_long_col_print(to_print_long);
         mx_col_print(to_print);
         mx_del_list(&to_print);
