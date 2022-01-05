@@ -1,52 +1,93 @@
 #include "uls.h"
 
-int main(int argc, char **argv)
-{
-    char *flags;
-    bool only_curr = false;
+int main(int argc, char **argv) {
+    char *flag;
+    int current = 0;
+    int left = 0;
+    int i = 1;
     t_list *dirs;
-    t_list *t;
-    bool dirs_left = false;
-    mx_validate_args(argc, argv);
-    flags = mx_extract_flags(argc, argv);
-    dirs = mx_extract_dirs(argc, argv);
-    mx_sort_list(dirs, &mx_by_lex);
-    mx_validate_dirs(dirs);
-    if (mx_printfiles(dirs, flags))
-    {
-        t = dirs;
-        while (t && !dirs_left)
-        {
-            if (t->data)
-                dirs_left = true;
-            t = t->next;
+    t_list *tmp;
+
+    mx_args_check(argc, argv);
+
+    t_list *uniques = NULL;
+    while (i < argc && argv[i][0] == '-') {
+        for (int j = 1; argv[i][j] != '\0'; j++) {
+            if (mx_is_unique(uniques, argv[i][j])) {
+                mx_push_front(&uniques, &argv[i][j]);
+            }
         }
-        if (dirs_left)
+        i++;
+    }
+
+    flag = mx_list_to_str(uniques);
+    mx_del_list(&uniques);
+
+    argc--;
+    argv++;
+
+    while (argc > 0 && (*argv)[0] == '-') {
+        argv++;
+        argc--;
+    }
+
+    i = 0;
+
+    while (i < argc) {
+        mx_push_back(&dirs, argv[i]);
+        i++;
+    }
+
+    mx_sort_list(dirs, &mx_by_lex);
+    DIR *curr;
+
+    while (dirs) {
+        curr = opendir(dirs->data);
+        if (errno != ENOTDIR && errno != EACCES && curr == NULL) {
+            mx_printerr("uls: ");
+            perror(dirs->data);
+            dirs->data = NULL;
+        }
+        dirs = dirs->next;
+    }
+
+    if (mx_print_files(dirs, flag)) {
+        tmp = dirs;
+        while (tmp && !left) {
+            if (tmp->data) {
+                left = true;
+            }
+            tmp = tmp->next;
+        }
+        if (left)
             mx_printchar('\n');
     }
-    only_curr = dirs == NULL;
-    if (only_curr)
+
+    current = dirs == NULL;
+
+    if (current) {
         mx_push_front(&dirs, ".");
-    only_curr = only_curr || mx_list_size(dirs) == 1;
-    t = dirs;
+    }
+
+    current = current || mx_list_size(dirs) == 1;
+    tmp = dirs;
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
-    while (t)
-    {
-        if (t->data != NULL)
-        {
-            if (!only_curr)
-            {
-                mx_printstr(t->data);
+
+    while (tmp != NULL) {
+        if (tmp->data != NULL) {
+            if (!current) {
+                mx_printstr(tmp->data);
                 mx_printstr(":\n");
             }
-            if (!mx_list_dir_content(t->data, flags) && t->next)
+            if (!mx_list_dir_content(tmp->data, flag) && tmp->next) {
                 mx_printchar('\n');
+            }
         }
-        t = t->next;
+        tmp = tmp->next;
     }
-    // freeing memory
-    free(flags);
+
+    free(flag);
     mx_del_list(&dirs);
     return errno != 0;
 }
