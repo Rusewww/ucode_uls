@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
 
-    while (tmp != NULL) {
+    while (tmp) {
         if (tmp->data != NULL) {
             if (!current) {
                 mx_printstr(tmp->data);
