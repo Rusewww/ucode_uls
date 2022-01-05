@@ -1,6 +1,6 @@
 #include "uls.h"
 
-bool mx_printfiles(t_list *dirs, char *flags)
+bool mx_print_files(t_list *dirs, char *flags)
 {
     DIR *curr;
     t_list *to_print = NULL;
