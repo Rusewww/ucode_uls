@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
             mx_printchar('\n');
     }*/
 
-    if (mx_print_files(dirs, flags))
+    if (mx_print_files(dirs, flag))
     {
         tmp = dirs;
         while (tmp && !left)
