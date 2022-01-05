@@ -1,15 +1,5 @@
 #include "../inc/uls.h"
 
-/*char *mx_get_path_base(char *path) {
-    char *res;
-    char **path_nodes = mx_strsplit(path, '/');
-    for (int i = 0; path_nodes[i]; i++)
-        if (!path_nodes[i + 1])
-            res = mx_strdup(path_nodes[i]);
-    mx_del_strarr(&path_nodes);
-    return res;
-}*/
-
 void print_long_list(char *dir_name, t_list *list) {
     char *buffer;
     t_list *head = list;
@@ -79,25 +69,26 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
         cur_file = readdir(dir);
     }
     mx_sort_list(to_print, &mx_by_lex);
-    if (!mx_strchr(flags, 'l'))
+    if (!mx_strchr(flags, 'l')) {
         mx_colum_print(to_print);
-    else
+    } else {
         print_long_list(dir_name, to_print);
-    if (!to_print)
+    }
+    if (!to_print) {
         is_empty = true;
+    }
     mx_del_list(&to_print);
     closedir(dir);
     if (inner_dir_names) {
         mx_sort_list(inner_dir_names, &mx_by_lex);
         curr = inner_dir_names;
-        while (curr) {
+        for (; curr; curr = curr->next) {
             mx_printchar('\n');
             mx_printstr(curr->data);
             mx_printstr(":\n");
             mx_list_dir_content(curr->data, flags);
             mx_strdel((char **) &curr->data);
             mx_pop_front(&inner_dir_names);
-            curr = curr->next;
         }
     }
     return is_empty;
