@@ -24,72 +24,73 @@ void print_long_list(char *dir_name, t_list *list) {
 
 bool mx_list_dir_content(char *dir_name, char *flags) {
     DIR *dir;
-    bool skip_dots = !mx_strchr(flags, 'a');
-    bool skip_only_dirdots = !mx_strchr(flags, 'A');
-    bool is_recursive = mx_strchr(flags, 'R');
-    char *base_name;
-    bool is_empty;
-    t_list *curr;
-    t_list *to_print = NULL;
-    char *path_build_buf = NULL;
-    t_list *inner_dir_names = NULL;
-    struct dirent *cur_file;
+    bool skip_dot = !mx_strchr(flags, 'a');
+    bool skip_dir_dot = !mx_strchr(flags, 'A');
+    bool recursive = mx_strchr(flags, 'R');
+    bool empty;
+    char *name;
+    char *path_build = NULL;
+    t_list *current;
+    t_list *print = NULL;
+    t_list *inner_names = NULL;
+    struct dirent *current_file;
     errno = 0;
     dir = opendir(dir_name);
     if (errno != 0) {
         char **path_nodes = mx_strsplit(dir_name, '/');
         for (int i = 0; path_nodes[i]; i++)
             if (!path_nodes[i + 1])
-                base_name = mx_strdup(path_nodes[i]);
+                name = mx_strdup(path_nodes[i]);
         mx_del_strarr(&path_nodes);
         mx_printerr("uls: ");
-        perror(base_name);
-        mx_strdel(&base_name);
+        perror(name);
+        mx_strdel(&name);
         return false;
     }
-    cur_file = readdir(dir);
-    while (cur_file) {
-        if (skip_dots && cur_file->d_name[0] == '.') {
-            if (skip_only_dirdots) {
-                cur_file = readdir(dir);
+    current_file = readdir(dir);
+    while (current_file) {
+        if (skip_dot && current_file->d_name[0] == '.') {
+            if (skip_dir_dot) {
+                current_file = readdir(dir);
                 continue;
-            } else if (!mx_strcmp(cur_file->d_name, ".") || !mx_strcmp(cur_file->d_name, "..")) {
-                cur_file = readdir(dir);
+            } else if (!mx_strcmp(current_file->d_name, ".") || !mx_strcmp(current_file->d_name, "..")) {
+                current_file = readdir(dir);
                 continue;
             }
         }
-        if (mx_strcmp(cur_file->d_name, ".") && mx_strcmp(cur_file->d_name, "..") && cur_file->d_type == DT_DIR &&
-            is_recursive) {
-            path_build_buf = mx_strdup(dir_name);
-            mx_str_concat(&path_build_buf, "/");
-            mx_str_concat(&path_build_buf, cur_file->d_name);
-            mx_push_front(&inner_dir_names, path_build_buf);
+        if (mx_strcmp(current_file->d_name, ".") && mx_strcmp(current_file->d_name, "..") &&
+            current_file->d_type == DT_DIR &&
+            recursive) {
+            path_build = mx_strdup(dir_name);
+            mx_str_concat(&path_build, "/");
+            mx_str_concat(&path_build, current_file->d_name);
+            mx_push_front(&inner_names, path_build);
         }
-        mx_push_front(&to_print, mx_strdup(cur_file->d_name));
-        cur_file = readdir(dir);
+        mx_push_front(&print, mx_strdup(current_file->d_name));
+        current_file = readdir(dir);
     }
-    mx_sort_list(to_print, &mx_by_lex);
+    mx_sort_list(print, &mx_by_lex);
     if (!mx_strchr(flags, 'l')) {
-        mx_colum_print(to_print);
+        mx_colum_print(print);
     } else {
-        print_long_list(dir_name, to_print);
+        print_long_list(dir_name, print);
     }
-    if (!to_print) {
-        is_empty = true;
+    if (!print) {
+        empty = true;
     }
-    mx_del_list(&to_print);
+    mx_del_list(&print);
     closedir(dir);
-    if (inner_dir_names) {
-        mx_sort_list(inner_dir_names, &mx_by_lex);
-        curr = inner_dir_names;
-        for (; curr; curr = curr->next) {
+    if (inner_names) {
+        mx_sort_list(inner_names, &mx_by_lex);
+        current = inner_names;
+        for (; current; current = current->next) {
             mx_printchar('\n');
-            mx_printstr(curr->data);
+            mx_printstr(current->data);
             mx_printstr(":\n");
-            mx_list_dir_content(curr->data, flags);
-            mx_strdel((char **) &curr->data);
-            mx_pop_front(&inner_dir_names);
+            mx_list_dir_content(current->data, flags);
+            mx_strdel((char **) &current->data);
+            mx_pop_front(&inner_names);
         }
     }
-    return is_empty;
+    return empty;
 }
