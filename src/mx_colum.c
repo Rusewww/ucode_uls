@@ -49,22 +49,23 @@ void mx_colum_print(t_list *list) {
         }
         i++;
     }
-    int j = 0;
-    for (int j = 0; j < rows; j++)
+
+    for (int j = 0; j < rows; j++) {
         for (int i = 0; i < cols; i++) {
             if (!to_print[i][j])
                 break;
             mx_printstr(to_print[i][j]);
             if (i + 1 != cols && to_print[i + 1][j]) {
-                cur_len = mx_strlen(to_print[i][j]);
-                tabs = max_len_name / 8 + 1;
-                tabs -= cur_len / 8;
+                current_lenght = mx_strlen(to_print[i][j]);
+                tabs = max_name / 8 + 1;
+                tabs -= current_lenght / 8;
                 for (int z = 0; z < tabs; z++)
                     mx_printchar('\t');
             } else
                 mx_printchar('\n');
             mx_strdel(&to_print[i][j]);
         }
+    }
 }
 
 int get_max_len(char ***str_arr, int index, int size) {
