@@ -20,7 +20,20 @@ int main(int argc, char **argv) {
     }
 
     mx_sort_list(dirs, &mx_by_lex);
-    mx_validate_dirs(dirs);
+
+    //mx_validate_dirs(dirs);
+
+    DIR *curr;
+    while (dirs) {
+        curr = opendir(dirs->data);
+        if (curr == NULL && errno != ENOTDIR && errno != EACCES) {
+            mx_printerr("uls: ");
+            perror(dirs->data);
+            dirs->data = NULL;
+        }
+        dirs = dirs->next;
+    }
+
     if (mx_print_files(dirs, flags)) {
         t = dirs;
         while (t && !dirs_left) {
