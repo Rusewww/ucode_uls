@@ -1,12 +1,10 @@
 #include "uls.h"
 
-t_list *mx_extract_dirs(int argc, char **argv)
-{
+t_list *mx_extract_dirs(int argc, char **argv) {
     t_list *res = NULL;
     argc--;
     argv++;
-    while (argc > 0 && (*argv)[0] == '-')
-    {
+    while (argc > 0 && (*argv)[0] == '-') {
         argv++;
         argc--;
     }
