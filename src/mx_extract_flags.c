@@ -1,16 +1,5 @@
 #include "uls.h"
 
-bool mx_is_unique(t_list *uniqs, char c)
-{
-    while (uniqs != NULL)
-    {
-        if (*(char *)(uniqs->data) == c)
-            return false;
-        uniqs = uniqs->next;
-    }
-    return true;
-}
-
 char *mx_extract_flags(int argc, char **argv)
 {
     char *res;

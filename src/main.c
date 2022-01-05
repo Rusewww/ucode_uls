@@ -8,7 +8,18 @@ int main(int argc, char **argv) {
     bool dirs_left = false;
     mx_args_check(argc, argv);
     flags = mx_extract_flags(argc, argv);
-    dirs = mx_extract_dirs(argc, argv);
+    //dirs = mx_get_dirs(argc, argv);
+
+    argc--;
+    argv++;
+    while (argc > 0 && (*argv)[0] == '-') {
+        argv++;
+        argc--;
+    }
+    for (int i = 0; i < argc; i++) {
+        mx_push_back(&dirs, argv[i]);
+    }
+
     mx_sort_list(dirs, &mx_by_lex);
     mx_validate_dirs(dirs);
     if (mx_print_files(dirs, flags)) {
