@@ -8,7 +8,6 @@ int main(int argc, char **argv) {
     bool dirs_left = false;
     mx_args_check(argc, argv);
     flags = mx_extract_flags(argc, argv);
-    //dirs = mx_get_dirs(argc, argv);
 
     argc--;
     argv++;
