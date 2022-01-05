@@ -42,12 +42,25 @@ int main(int argc, char **argv) {
 
     mx_validate_dirs(dirs);
 
-    if (mx_print_files(dirs, flag)) {
+    /*if (mx_print_files(dirs, flag)) {
         tmp = dirs;
         while (tmp && !left) {
             if (tmp->data) {
                 left = true;
             }
+            tmp = tmp->next;
+        }
+        if (left)
+            mx_printchar('\n');
+    }*/
+
+    if (mx_print_files(dirs, flags))
+    {
+        tmp = dirs;
+        while (tmp && !left)
+        {
+            if (tmp->data)
+                left = true;
             tmp = tmp->next;
         }
         if (left)
@@ -69,7 +82,7 @@ int main(int argc, char **argv) {
         if (tmp->data != NULL) {
             if (!current) {
                 mx_printstr(tmp->data);
-                mx_printstr(":\n\n");
+                mx_printstr(":\n");
             }
             if (!mx_list_dir_content(tmp->data, flag) && tmp->next) {
                 mx_printchar('\n');
