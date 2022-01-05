@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
         if (tmp->data != NULL) {
             if (!current) {
                 mx_printstr(tmp->data);
-                mx_printstr(":\n");
+                mx_printstr(":\n\n");
             }
             if (!mx_list_dir_content(tmp->data, flag) && tmp->next) {
                 mx_printchar('\n');
