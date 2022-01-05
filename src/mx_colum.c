@@ -1,7 +1,7 @@
-#include "uls.h"
+#include "../inc/uls.h"
 
 void mx_colum_print(t_list *list) {
-    int cols = 0;
+    /*int cols = 0;
     int tabs = 0;
     int rows = 0;
     int current_lenght = 0;
@@ -69,7 +69,66 @@ void mx_colum_print(t_list *list) {
             mx_strdel(&to_print[i][j]);
         }
         j++;
+    }*/
+
+    int max_len_name = 0;
+    int cur_len = 0;
+    int cols = 0;
+    int tabs = 0;
+    int rows = 0;
+    int elements = mx_list_size(list);
+    char ***to_print;
+    if (elements == 0)
+        return;
+    t_list *curr = list;
+    if (!isatty(STDOUT_FILENO)) {
+        while (curr) {
+            mx_printstr(curr->data);
+            mx_printchar('\n');
+            mx_strdel((char **) &curr->data);
+            curr = curr->next;
+        }
+        return;
     }
+    struct winsize w_size;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w_size);
+    while (curr) {
+        cur_len = mx_strlen(curr->data);
+        if (cur_len > max_len_name)
+            max_len_name = cur_len;
+        curr = curr->next;
+    }
+    cols = (w_size.ws_col) / ((max_len_name / 8 + 1) * 8);
+    rows = elements / cols;
+    rows += elements % cols == 0 ? 0 : 1;
+    to_print = malloc(cols * sizeof *to_print);
+    curr = list;
+    for (int i = 0; i < cols; i++) {
+        to_print[i] = malloc(rows * sizeof **to_print);
+
+        for (int j = 0; j < rows; j++)
+            if (curr) {
+                to_print[i][j] = curr->data;
+                curr = curr->next;
+            } else
+                to_print[i][j] = NULL;
+    }
+    for (int j = 0; j < rows; j++)
+        for (int i = 0; i < cols; i++) {
+            if (!to_print[i][j])
+                break;
+            mx_printstr(to_print[i][j]);
+            if (i + 1 != cols && to_print[i + 1][j]) {
+                cur_len = mx_strlen(to_print[i][j]);
+                tabs = max_len_name / 8 + 1;
+                tabs -= cur_len / 8;
+                for (int z = 0; z < tabs; z++)
+                    mx_printchar('\t');
+            } else
+                mx_printchar('\n');
+            mx_strdel(&to_print[i][j]);
+        }
+
 }
 
 int get_max_len(char ***str_arr, int index, int size) {
