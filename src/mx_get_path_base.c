@@ -1,12 +1,15 @@
 #include "uls.h"
 
-char *mx_get_path_base(char *path)
-{
+char *mx_get_path_base(char *path) {
     char *res;
-    char **path_nodes = mx_strsplit(path, '/');
-    for (int i = 0; path_nodes[i]; i++)
-        if (!path_nodes[i + 1])
-            res = mx_strdup(path_nodes[i]);
-    mx_del_strarr(&path_nodes);
+    char **node_path = mx_strsplit(path, '/');
+    int i = 0;
+    while (node_path[i]) {
+        if (!node_path[i + 1]) {
+            res = mx_strdup(node_path[i]);
+        }
+        i++;
+    }
+    mx_del_strarr(&node_path);
     return res;
 }

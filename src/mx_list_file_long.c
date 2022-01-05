@@ -14,7 +14,7 @@ char *get_permission(mode_t mode) {
     return out;
 }
 
-char *get_time_trimmed(time_t file_time) {
+char *get_trimmed(time_t file_time) {
     char **split_buffer = mx_strsplit(ctime(&file_time), ' ');
     time_t current_time = time(NULL);
     char **current_time_buffer = mx_strsplit(ctime(&current_time), ' ');
@@ -85,7 +85,7 @@ char *mx_list_file_long(char *src, int *block_count) {
     mx_str_concat(&res, temp_buf);
     mx_strdel(&temp_buf);
     mx_str_concat(&res, " ");
-    temp_buf = get_time_trimmed(file_info.st_mtimespec.tv_sec);
+    temp_buf = get_trimmed(file_info.st_mtimespec.tv_sec);
     mx_str_concat(&res, temp_buf);
     mx_strdel(&temp_buf);
     mx_str_concat(&res, " ");
