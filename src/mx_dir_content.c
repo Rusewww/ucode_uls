@@ -76,9 +76,9 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     }
     mx_sort_list(to_print, &mx_by_lex);
     if (!mx_strchr(flags, 'l'))
-        mx_col_print(to_print);
+        mx_colum_print(to_print);
     else
-        print_list_long(dir_name, to_print);
+        print_long_list(dir_name, to_print);
     if (!to_print)
         is_empty = true;
     mx_del_list(&to_print);
