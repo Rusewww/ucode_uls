@@ -50,8 +50,9 @@ int main(int argc, char **argv) {
             }
             tmp = tmp->next;
         }
-        if (left)
+        if (left) {
             mx_printchar('\n');
+        }
     }
 
     current = dirs == NULL;
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
     mx_sort_list(dirs, &mx_by_lex);
     mx_sort_list(dirs, &mx_by_null);
 
-    while (tmp) {
+    for (; tmp; tmp = tmp->next) {
         if (tmp->data != NULL) {
             if (!current) {
                 mx_printstr(tmp->data);
@@ -75,7 +76,6 @@ int main(int argc, char **argv) {
                 mx_printchar('\n');
             }
         }
-        tmp = tmp->next;
     }
 
     free(flag);

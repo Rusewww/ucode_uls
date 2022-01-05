@@ -15,6 +15,7 @@
 #include <sys/errno.h>
 #include <uuid/uuid.h>
 
+void mx_args_check(int argc, char **argv);
 bool mx_list_dir_content(char *dir_name, char *flags);
 bool mx_print_files(t_list *dirs, char *flag);
 char *mx_list_file_long(char *src, int *blcok_count);
