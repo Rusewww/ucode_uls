@@ -49,22 +49,26 @@ void mx_colum_print(t_list *list) {
         }
         i++;
     }
-
-    for (int j = 0; j < rows; j++) {
-        for (int i = 0; i < cols; i++) {
-            if (!to_print[i][j])
+    int j = 0;
+    while (j < rows) {
+        for (i = 0; i < cols; i++) {
+            if (!to_print[i][j]) {
                 break;
+            }
             mx_printstr(to_print[i][j]);
             if (i + 1 != cols && to_print[i + 1][j]) {
                 current_lenght = mx_strlen(to_print[i][j]);
                 tabs = max_name / 8 + 1;
                 tabs -= current_lenght / 8;
-                for (int z = 0; z < tabs; z++)
+                for (int k = 0; k < tabs; k++) {
                     mx_printchar('\t');
-            } else
+                }
+            } else {
                 mx_printchar('\n');
+            }
             mx_strdel(&to_print[i][j]);
         }
+        j++;
     }
 }
 
@@ -92,7 +96,7 @@ void print_spaces(char *str, int max) {
 }
 
 void mx_long_col_print(t_list *list) {
-    t_list *cur = list;
+    /*t_list *cur = list;
     int count = mx_list_size(list);
     int parts = 0;
     int i = 0;
@@ -149,5 +153,54 @@ void mx_long_col_print(t_list *list) {
         i++;
     }
     free(split);
-    free(max_size);
+    free(max_size);*/
+    t_list *cur = list;
+    int count = mx_list_size(list);
+    int parts = 0;
+    int *max_sizes;
+    char ***splited;
+    if (!list)
+        return;
+    splited = malloc(count * sizeof *splited);
+    for (int i = 0; i < count; i++) {
+
+        splited[i] = mx_strsplit(cur->data, ' ');
+        cur = cur->next;
+    }
+    for (int i = 0; splited[0][i] != NULL; i++)
+        parts++;
+    max_sizes = malloc(parts * sizeof *max_sizes);
+    for (int i = 0; i < 8; i++) {
+        max_sizes[i] = get_max_len(splited, i, count);
+    }
+    cur = list;
+    for (int i = 0; i < count; i++) {
+        for (int j = 0; j < parts; j++) {
+            if (!splited[i][j]) {
+                mx_printchar('\n');
+                break;
+            }
+            if (j == 5) {
+                mx_printstr(mx_strstr(cur->data, splited[i][j]));
+                mx_printchar('\n');
+                break;
+            }
+            if (j == 0 || j == 2 || j == 3) {
+                mx_printstr(splited[i][j]);
+                print_spaces(splited[i][j], max_sizes[j]);
+                mx_printstr("  ");
+                continue;
+            }
+            if (mx_isdigit(splited[i][j][0])) {
+                print_spaces(splited[i][j], max_sizes[j]);
+                mx_printstr(splited[i][j]);
+                mx_printchar(' ');
+            }
+        }
+        mx_strdel((char **) &cur->data);
+        cur = cur->next;
+        mx_del_strarr(&splited[i]);
+    }
+    free(splited);
+    free(max_sizes);
 }
