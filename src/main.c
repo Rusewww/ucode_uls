@@ -12,6 +12,21 @@ char *mx_extract_flags(int argc, char **argv) {
     return res;
 }
 
+t_list *mx_extract_dirs(int argc, char **argv)
+{
+    t_list *res = NULL;
+    argc--;
+    argv++;
+    while (argc > 0 && (*argv)[0] == '-')
+    {
+        argv++;
+        argc--;
+    }
+    for (int i = 0; i < argc; i++)
+        mx_push_back(&res, argv[i]);
+    return res;
+}
+
 int main(int argc, char **argv) {
     /*char *flag;
     int current = 0;
@@ -103,6 +118,7 @@ int main(int argc, char **argv) {
     flags = mx_extract_flags(argc, argv);
 
     dirs = mx_extract_dirs(argc, argv);
+
     mx_sort_list(dirs, &mx_by_lex);
     mx_validate_dirs(dirs);
     if (mx_print_files(dirs, flags)) {
