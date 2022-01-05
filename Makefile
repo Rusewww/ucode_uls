@@ -3,7 +3,7 @@ all: uls
 uls: libmx.a obj
 	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc obj/*.o libmx/libmx.a -o uls
 
-obj: src/*.c inc/*.h
+obj: ../clone/src ../clone/inc
 	@mkdir -p obj
 	@clang -std=c11 -Wall -Wextra -Werror -Wpedantic -I inc -c src/*.c
 	@mv *.o obj

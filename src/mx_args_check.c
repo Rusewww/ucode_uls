@@ -20,4 +20,3 @@ void mx_args_check(int argc, char **argv) {
         }
     }
 }
-

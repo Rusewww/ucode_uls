@@ -14,7 +14,7 @@ char *get_permission(mode_t mode) {
     return out;
 }
 
-char *get_trimmed(time_t file_time) {
+char *get_time_trimmed(time_t file_time) {
     char **split_buffer = mx_strsplit(ctime(&file_time), ' ');
     time_t current_time = time(NULL);
     char **current_time_buffer = mx_strsplit(ctime(&current_time), ' ');
@@ -41,7 +41,16 @@ char *get_trimmed(time_t file_time) {
 
 char *mx_list_file_long(char *src, int *block_count) {
     mode_t mode;
-    char *name = mx_get_path_base(src);
+    char *name;
+    char **path = mx_strsplit(src, '/');
+    int i = 0;
+    while (path[i]) {
+        if (!path[i + 1]) {
+            name = mx_strdup(path[i]);
+        }
+        i++;
+    }
+    mx_del_strarr(&path);
     char *res = NULL;
     char *temp_buf;
     struct stat file_info;
@@ -85,7 +94,7 @@ char *mx_list_file_long(char *src, int *block_count) {
     mx_str_concat(&res, temp_buf);
     mx_strdel(&temp_buf);
     mx_str_concat(&res, " ");
-    temp_buf = get_trimmed(file_info.st_mtimespec.tv_sec);
+    temp_buf = get_time_trimmed(file_info.st_mtimespec.tv_sec);
     mx_str_concat(&res, temp_buf);
     mx_strdel(&temp_buf);
     mx_str_concat(&res, " ");
