@@ -87,13 +87,15 @@ bool mx_list_dir_content(char *dir_name, char *flags) {
     if (dir_names) {
         mx_sort_list(dir_names, &mx_by_lex);
         curr = dir_names;
-        for (; curr != NULL; curr = curr->next) {
+
+        while (curr) {
             mx_printchar('\n');
             mx_printstr(curr->data);
             mx_printstr(":\n");
             mx_list_dir_content(curr->data, flags);
             mx_strdel((char **) &curr->data);
             mx_pop_front(&dir_names);
+            curr = curr->next;
         }
     }
     return empty;
