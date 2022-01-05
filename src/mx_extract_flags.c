@@ -1,7 +1,6 @@
 #include "uls.h"
 
-char *mx_extract_flags(int argc, char **argv)
-{
+char *mx_extract_flags(int argc, char **argv) {
     char *res;
     t_list *uniques = NULL;
     for (int i = 1; i < argc && argv[i][0] == '-'; i++)
